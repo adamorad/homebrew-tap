@@ -11,13 +11,13 @@ class Agentpeek < Formula
   def install
     system "swift", "build", "-c", "release", "--disable-sandbox"
     bin.install ".build/release/agentpeek"
-    prefix.install "com.agentpeek.daemon.plist"
+    (share/"agentpeek").install "com.agentpeek.daemon.plist"
   end
 
   def caveats
     <<~EOS
       To start AgentPeek automatically at login:
-        cp #{prefix}/com.agentpeek.daemon.plist ~/Library/LaunchAgents/
+        cp #{share}/agentpeek/com.agentpeek.daemon.plist ~/Library/LaunchAgents/
         launchctl load ~/Library/LaunchAgents/com.agentpeek.daemon.plist
 
       Then configure your MCP client to connect to http://127.0.0.1:27183
