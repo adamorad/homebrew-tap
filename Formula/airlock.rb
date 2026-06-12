@@ -2,7 +2,7 @@ class Airlock < Formula
   desc "Agent coordination daemon for macOS and Linux — locks, notes, events over MCP"
   homepage "https://airlock-web.vercel.app"
   url "https://github.com/adamorad/airlock/archive/refs/tags/v2.0.0.tar.gz"
-  sha256 "60c9172005316c7431f819350bda5b6a932400832e0bc3a5ef6b3f098799cdde"
+  sha256 "bb76aa487d8565011e3427aa8bfa21133b3376d4d667b81ecc8c29570d37df81"
   version "2.0.0"
   license "MIT"
   depends_on "go" => :build
