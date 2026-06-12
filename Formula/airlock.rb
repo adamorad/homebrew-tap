@@ -1,30 +1,26 @@
 class Airlock < Formula
-  desc "Agent coordination daemon for macOS — named locks and shared scratchpad via MCP"
+  desc "Agent coordination daemon for macOS and Linux — locks, notes, events over MCP"
   homepage "https://airlock-web.vercel.app"
-  url "https://github.com/adamorad/airlock/archive/refs/tags/v1.1.0.tar.gz"
-  sha256 "11dabcde924b50010e5a889f13c9613092f0f1a1bedf6bf27bbbd629247c9ffd"
-  version "1.1.0"
+  url "https://github.com/adamorad/airlock/archive/refs/tags/v2.0.0.tar.gz"
+  sha256 "60c9172005316c7431f819350bda5b6a932400832e0bc3a5ef6b3f098799cdde"
+  version "2.0.0"
   license "MIT"
-
-  depends_on :macos => :ventura
+  depends_on "go" => :build
 
   def install
-    system "swift", "build", "-c", "release", "--disable-sandbox"
-    bin.install ".build/release/airlock"
-    (share/"airlock").install "com.airlock.daemon.plist"
+    system "go", "build", "-trimpath", "-ldflags", "-s -w", "-o", bin/"airlock", "."
   end
 
   def caveats
     <<~EOS
-      To start Airlock automatically at login:
-        cp #{share}/airlock/com.airlock.daemon.plist ~/Library/LaunchAgents/
-        launchctl load ~/Library/LaunchAgents/com.airlock.daemon.plist
-
-      Then configure your MCP client to connect to http://127.0.0.1:27183
+      Start Airlock and register it as a service:
+        airlock install-service
+      Then point your MCP client at http://127.0.0.1:27183
+      On Linux a bearer token is required — see ~/.airlock/token
     EOS
   end
 
   test do
-    assert_predicate bin/"airlock", :exist?
+    assert_match "airlock", shell_output("#{bin}/airlock version")
   end
 end
